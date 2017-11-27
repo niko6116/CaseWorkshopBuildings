@@ -72,7 +72,7 @@ public class Building implements IBuilding {
     @Override
     public ObservableList<ISensor> getCO2Sensors() {
         ObservableList<ISensor> sensors = FXCollections.observableArrayList();
-        for (TempSensor sensor : tempSensors) {
+        for (CO2Sensor sensor : co2Sensors) {
             sensors.add(sensor);
         }
         return sensors;

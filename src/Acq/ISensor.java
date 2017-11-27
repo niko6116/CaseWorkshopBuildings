@@ -5,7 +5,7 @@
  */
 package Acq;
 
-import java.util.LinkedList;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -15,7 +15,7 @@ public interface ISensor {
 
     public double getMeasurement();
 
-    public LinkedList<Double> getReadings();
+    public ObservableList<Double> getReadings();
 
     public void addReading(double reading);
 

@@ -7,6 +7,8 @@ package Business;
 
 import Acq.ISensor;
 import java.util.LinkedList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -29,8 +31,12 @@ public class TempSensor implements ISensor {
     }
 
     @Override
-    public LinkedList<Double> getReadings() {
-        return this.readings;
+    public ObservableList<Double> getReadings() {
+        ObservableList<Double> values = FXCollections.observableArrayList();
+        for (Double d : readings) {
+            values.add(d);
+        }
+        return values;
     }
 
     @Override

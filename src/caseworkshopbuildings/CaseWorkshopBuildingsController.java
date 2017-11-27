@@ -7,6 +7,7 @@ package caseworkshopbuildings;
 
 import Acq.*;
 import Business.BusinessFacade;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,6 +22,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 /**
@@ -28,7 +31,7 @@ import javafx.scene.text.TextFlow;
  * @author Bruger
  */
 public class CaseWorkshopBuildingsController implements Initializable {
-    
+
     @FXML
     private Button addTempSensorButton;
     @FXML
@@ -48,8 +51,6 @@ public class CaseWorkshopBuildingsController implements Initializable {
     @FXML
     private TextField buildingAdressTextField;
     @FXML
-    private TextFlow infoTextFlow;
-    @FXML
     private Tab tempTab;
     @FXML
     private Tab co2Tab;
@@ -61,63 +62,109 @@ public class CaseWorkshopBuildingsController implements Initializable {
     private ListView<ISensor> tempSensorsListView;
     @FXML
     private ListView<ISensor> co2SensorsListView;
-    
+    @FXML
+    private ListView<Double> outputTextView;
+    @FXML
+    private Text infoText;
+
     private BusinessFacade businessFacade;
-    
+
     private ObservableList<IBuilding> buildings;
     private ObservableList<ISensor> tempSensors;
     private ObservableList<ISensor> co2Sensors;
-    
+    private ObservableList<Double> output;
+
     @Override
+
     public void initialize(URL url, ResourceBundle rb) {
         businessFacade = new BusinessFacade();
         buildings = FXCollections.observableArrayList();
         tempSensors = FXCollections.observableArrayList();
         co2Sensors = FXCollections.observableArrayList();
-        
+        output = FXCollections.observableArrayList();
+
         buildingsListView.setItems(buildings);
         buildingsListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         tempSensorsListView.setItems(tempSensors);
         tempSensorsListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         co2SensorsListView.setItems(co2Sensors);
         co2SensorsListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        outputTextView.setItems(output);
+        outputTextView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
-    
+
     @FXML
     private void handleButtonActionAddBuilding(ActionEvent event) {
-        String name = buildingNameTextField.getText();
-        String adress = buildingAdressTextField.getText();
-        businessFacade.addNewBuilding(name, adress);
-        buildings.add(businessFacade.getBuildingManagement().getBuilding(adress));
+        if (buildingNameTextField.getText().equals("")) {
+            if (buildingAdressTextField.getText().equals("")) {
+                infoText.setText("Give the building a name and an adress");
+            } else {
+                infoText.setText("Give the building a name");
+            }
+        } else if (buildingAdressTextField.getText().equals("")) {
+            infoText.setText("Give the building an adress");
+        } else {
+            String name = buildingNameTextField.getText();
+            String adress = buildingAdressTextField.getText();
+            businessFacade.addNewBuilding(name, adress);
+            buildings.add(businessFacade.getBuildingManagement().getBuilding(adress));
+            infoText.setText("Building added");
+        }
     }
-    
+
     @FXML
     private void handleButtonActionAddTempSensor(ActionEvent event) {
-        buildingsListView.getSelectionModel().getSelectedItem().addNewTempSensor();
+        try {
+            buildingsListView.getSelectionModel().getSelectedItem().addNewTempSensor();
+            infoText.setText("Temperature sensor added");
+        } catch (NullPointerException ex) {
+            infoText.setText("Choose a building");
+        }
     }
-    
+
     @FXML
     private void handleButtonActionAddCO2Sensor(ActionEvent event) {
-        buildingsListView.getSelectionModel().getSelectedItem().addNewCO2Sensor();
+        try {
+            buildingsListView.getSelectionModel().getSelectedItem().addNewCO2Sensor();
+            infoText.setText("CO2 sensor added");
+        } catch (NullPointerException ex) {
+            infoText.setText("Choose a building");
+        }
     }
-    
+
     @FXML
     private void handleButtonActionAddTemp(ActionEvent event) {
-        tempSensorsListView.getSelectionModel().getSelectedItem();
-        BigDecimal value = new BigDecimal(tempTextField.getText());
+        Double value = new Double(tempTextField.getText());
+        tempSensorsListView.getSelectionModel().getSelectedItem().addReading(value);
+        infoText.setText("Temperature " + value + " added");
     }
-    
+
     @FXML
     private void handleButtonActionAddCO2Level(ActionEvent event) {
-        co2SensorsListView.getSelectionModel().getSelectedItem();
-        BigDecimal value = new BigDecimal(co2TextField.getText());
+        Double value = new Double(co2TextField.getText());
+        co2SensorsListView.getSelectionModel().getSelectedItem().addReading(value);
+        infoText.setText("CO2 level " + value + " added");
     }
-    
+
     @FXML
     private void handleBuildingsSelectionChanged(Event event) {
         tempSensors = buildingsListView.getSelectionModel().getSelectedItem().getTempSensors();
         tempSensorsListView.setItems(tempSensors);
         co2Sensors = buildingsListView.getSelectionModel().getSelectedItem().getCO2Sensors();
         co2SensorsListView.setItems(co2Sensors);
+    }
+
+    @FXML
+    private void handleTempSensorsSelectionChanged(MouseEvent event) {
+        output = tempSensorsListView.getSelectionModel().getSelectedItem().getReadings();
+        outputTextView.getSelectionModel().getSelectedItem();
+        outputTextView.setItems(output);
+    }
+
+    @FXML
+    private void handleCO2SensorsSelectionChanged(MouseEvent event) {
+        output = co2SensorsListView.getSelectionModel().getSelectedItem().getReadings();
+        outputTextView.getSelectionModel().getSelectedItem();
+        outputTextView.setItems(output);
     }
 }
