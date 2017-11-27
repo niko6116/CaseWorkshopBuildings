@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.TextFlow?>
+
+<GridPane hgap="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="caseworkshopbuildings.CaseWorkshopBuildingsController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="addTempSensorButton" mnemonicParsing="false" onAction="#handleButtonActionAddTempSensor" text="Add Temp Sensor" />
+                  <Button fx:id="addTempButton" mnemonicParsing="false" onAction="#handleButtonActionAddTemp" text="Add Temp" />
+                  <TextField fx:id="tempTextField" maxWidth="-Infinity" prefWidth="30.0" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="addCO2SensorButton" mnemonicParsing="false" onAction="#handleButtonActionAddCO2Sensor" text="Add CO2 Sensor" />
+                  <Button fx:id="addCO2Button" mnemonicParsing="false" onAction="#handleButtonActionAddCO2Level" text="Add CO2 Level" />
+                  <TextField fx:id="co2TextField" maxWidth="-Infinity" prefWidth="30.0" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="addBuildingButton" mnemonicParsing="false" onAction="#handleButtonActionAddBuilding" text="Add Building" />
+                  <TextField fx:id="buildingNameTextField" prefWidth="100.0" />
+                  <TextField fx:id="buildingAdressTextField" maxWidth="-Infinity" prefWidth="100.0" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+            <TextFlow fx:id="infoTextFlow" prefHeight="200.0" prefWidth="200.0" />
+         </children>
+      </VBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+         <children>
+            <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+               <tabs>
+                  <Tab fx:id="tempTab" text="Temperature">
+                     <content>
+                        <ListView fx:id="tempSensorsListView" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+                  <Tab fx:id="co2Tab" text="Co2">
+                     <content>
+                        <ListView fx:id="co2SensorsListView" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+               </tabs>
+            </TabPane>
+            <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab fx:id="buildingsTab" text="Buildings">
+                     <content>
+                        <ListView fx:id="buildingsListView" onMouseClicked="#handleBuildingsSelectionChanged" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+   </padding>
+</GridPane>
